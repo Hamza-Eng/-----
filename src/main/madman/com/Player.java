@@ -13,7 +13,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [ID=" + index.substring(2) + ", choise=" + choise + "]";
+		return "Player [ID=" + index + ", choise=" + choise + "]";
 	}
 
 }
