@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameClass {
-	List<String> choices = Stream.of("hajara", "wara9a", "mi9as").collect(Collectors.toList());
+	List<String> choices = Stream.of("hajara", "wara9a", "mi9as", "hajara", "wara9a", "mi9as", "hajara", "wara9a",
+			"mi9as", "hajara", "wara9a", "mi9as").collect(Collectors.toList());
 	List<Player> ansers = new ArrayList<>();
-	int nbr = 11;
+	int nbr =20;
+	// nbr must less that 20
 
 	String getrandom() {
 		Random random = new Random();
@@ -19,7 +21,7 @@ public class GameClass {
 
 	}
 
-	private List<Player> createPlayers(int nbr) {
+	private List<Player> CreateOrupdatePlayersChoise(int nbr) {
 		List<Player> rtn = new ArrayList<>();
 		for (int i = 0; i < nbr; i++) {
 			rtn.add(new Player(getrandom()));
@@ -29,14 +31,31 @@ public class GameClass {
 
 	}
 
+	private List<Player> CreateOrupdatePlayersChoise(List<Player> players) {
+		List<Player> rtn = players;
+		for (Player player : rtn) {
+			player.choise = getrandom();
+		}
+		return rtn;
+	}
+
 	public void play() {
-int i=1;
-		List<Player> list = createPlayers(nbr);
+		long startTime = System.nanoTime();
+
+		int i = 1;
+		List<Player> list = CreateOrupdatePlayersChoise(nbr);
+
 		while (!CheckPlayers(list)) {
-			list = createPlayers(nbr);
+			list = CreateOrupdatePlayersChoise(list);
 			i++;
 		}
-		System.out.println("number of try : "+i);
+		System.out.println("number of try : " + i);
+
+		long endTime = System.nanoTime();
+
+		long duration = (endTime - startTime); // divide by 1000000 to get milliseconds
+		System.out.println("duration  of exucution   : " + duration / 1000000 + " milliseconds ");
+		System.out.println("duration  of exucution   : " + (float) duration / 1000000000 + " seconds ");
 	}
 
 	// m9as => wr9a => 7ajra =>
@@ -48,30 +67,33 @@ int i=1;
 	}
 
 	private boolean CheckPlayers(List<Player> list) {
-//		"hajara", "wara9a", "mi9as"
+		List<Player> hajaraPlayers = chercher(list, "hajara");
+		List<Player> wara9aPlayers = chercher(list, "wara9a");
+		List<Player> mi9asPlayers = chercher(list, "mi9as");
+
+		// "hajara", "wara9a", "mi9as"
 		System.out.println("=======================================================================");
-		if ((chercher(list, "hajara").size() > 0 && chercher(list, "wara9a").size() > 0
-				&& chercher(list, "mi9as").size() > 0)
-				|| (chercher(list, "hajara").size() == ansers.size() || chercher(list, "wara9a").size() == ansers.size()
-						|| chercher(list, "mi9as").size() == ansers.size())) {
+		if ((hajaraPlayers.size() > 0 && wara9aPlayers.size() > 0 && mi9asPlayers.size() > 0)
+				|| (hajaraPlayers.size() == ansers.size() || wara9aPlayers.size() == ansers.size()
+						|| mi9asPlayers.size() == ansers.size())) {
 			System.out.println("No win No lose ! try again.");
 			afficher(list);
 			System.out.println("=======================================================================");
 			return false;
 		} else {
 			// group plyers
-			if (checkIfIsNull(chercher(list, "mi9as"))) {
-				System.out.println("player win : " + chercher(list, "wara9a").toString());
-				System.out.println("players lose : " + chercher(list, "hajara").toString());
+			if (checkIfIsNull(mi9asPlayers)) {
+				System.out.println("player win : " + wara9aPlayers.toString());
+				System.out.println("players lose : " + hajaraPlayers.toString());
 
 			}
-			if (checkIfIsNull(chercher(list, "wara9a"))) {
-				System.out.println("player win : " + chercher(list, "hajara").toString() );
-				System.out.println("players lose : " + chercher(list, "mi9as").toString());
+			if (checkIfIsNull(wara9aPlayers)) {
+				System.out.println("player win : " + hajaraPlayers.toString());
+				System.out.println("players lose : " + mi9asPlayers.toString());
 			}
-			if (checkIfIsNull(chercher(list, "hajara"))) {
-				System.out.println("player win : " + chercher(list, "mi9as").toString() );
-				System.out.println("players lose : " + chercher(list, "wara9a").toString());
+			if (checkIfIsNull(hajaraPlayers)) {
+				System.out.println("player win : " + mi9asPlayers.toString());
+				System.out.println("players lose : " + wara9aPlayers.toString());
 			}
 
 		}
